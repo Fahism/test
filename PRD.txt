@@ -1,0 +1,135 @@
+Product Requirements Document (PRD)
+Knowledge Sharing Community Platform
+________________________________________
+1. Product Overview
+The Knowledge Sharing Community Platform is a web-based application that enables users to ask questions, share knowledge, upload learning resources, and participate in topic-based discussions in a structured community environment.
+The platform promotes peer-to-peer learning with secure authentication, fast search, and moderated content.
+________________________________________
+2. Problem Statement
+Learners face these issues:
+•	Knowledge scattered across multiple platforms
+•	No structured, syllabus-focused discussion space
+•	Difficulty identifying reliable content
+This platform centralizes learning discussions with topic categorization and moderation.
+________________________________________
+3. Target Users
+Primary Users
+•	College students
+•	Self-learners
+Secondary Users
+•	Contributors and mentors
+•	Educators
+Admin
+•	Moderates content
+•	Manages users
+________________________________________
+4. Goals & Success Metrics
+Goals
+•	Enable fast knowledge sharing
+•	Encourage meaningful discussions
+•	Maintain content quality
+Success Metrics
+•	Daily active users
+•	Posts and comments per day
+•	Average response time
+•	Search usage rate
+________________________________________
+5. Core Features (MVP)
+5.1 User Management (Supabase Auth)
+•	Email/password authentication
+•	Secure session handling
+•	User profile stored in Supabase
+•	Role-based access (user/admin)
+________________________________________
+5.2 Knowledge Posting
+•	Create, edit, delete posts
+•	Add tags/topics
+•	Attach resource links or files
+•	Store post data in Supabase tables
+________________________________________
+5.3 Community Interaction
+•	Comment on posts
+•	Nested replies
+•	Like/upvote posts
+•	Real-time updates (optional via Supabase Realtime)
+________________________________________
+5.4 Search & Filter
+•	Keyword search using Supabase full-text search
+•	Filter by topic, date, popularity
+•	Sort results
+________________________________________
+5.5 Notifications
+•	Trigger notifications on replies/comments
+•	Store notifications in Supabase
+•	Simple notification feed
+________________________________________
+5.6 Content Moderation
+•	Report posts/comments
+•	Admin moderation dashboard
+•	Soft delete for removed content
+________________________________________
+6. User Flow
+1.	User signs up via Supabase Auth
+2.	Completes profile
+3.	Browses topics
+4.	Creates or engages in posts
+5.	Receives notifications
+6.	Admin moderates if needed
+________________________________________
+7. Functional Requirements
+Authentication
+•	Supabase handles user identity
+•	JWT-based session management
+•	Secure access to protected routes
+Data Management
+•	Posts, comments, likes stored in Supabase Postgres
+•	Files stored in Supabase Storage
+•	Relationships via foreign keys
+________________________________________
+8. Non-Functional Requirements
+•	Responsive UI
+•	Secure data access (RLS enabled)
+•	Scalable backend using Supabase
+•	Fast queries with indexing
+________________________________________
+9. Technology Stack (Updated)
+Frontend
+•	HTML5
+•	CSS3
+•	JavaScript
+Backend
+•	Python (Flask or Django)
+(or frontend-only with Supabase client if preferred)
+Database & Backend Services
+•	Supabase
+o	PostgreSQL database
+o	Authentication
+o	Storage
+o	Realtime subscriptions
+________________________________________
+10. Out of Scope (MVP)
+•	AI recommendations
+•	Mobile app
+•	Gamification system
+•	Advanced analytics
+________________________________________
+11. Future Enhancements
+•	Reputation system
+•	AI-powered search
+•	Personalized feeds
+•	Push notifications
+•	Mobile app
+________________________________________
+12. Assumptions & Constraints
+•	Supabase free tier initially
+•	Manual moderation in MVP
+•	Academic-focused audience
+________________________________________
+13. Vibe Coding Notes (Important)
+Recommended build order:
+1.	Supabase project setup
+2.	Auth + RLS rules
+3.	Core tables (users, posts, comments)
+4.	CRUD for posts
+5.	Comments + notifications
+6.	Admin moderation

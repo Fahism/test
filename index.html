@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KSCS — A community platform to share and discover knowledge across topics like AI, Web, Python, and more." />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>KSCS – Knowledge Sharing Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <a href="#app-layout" class="skip-link">Skip to main content</a>
+
+  <!-- ───── Top Bar ───── -->
+  <header class="topbar" id="topbar" role="banner" hidden>
+    <div class="topbar-left">
+      <div class="brand">
+        <div class="brand-mark">✺</div>
+        <span class="brand-name">KSCS</span>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input id="search-input" type="search" placeholder="Search knowledge..." aria-label="Search posts" />
+      </div>
+    </div>
+    <nav class="top-actions">
+      <span id="user-greeting" class="greeting" hidden></span>
+      <button class="nav-link notif-btn" id="btn-notifications" aria-label="Open notifications">
+        🔔 <span class="notif-badge" id="notif-badge" aria-live="polite" hidden></span>
+      </button>
+      <button class="nav-link" id="btn-profile" hidden>👤 Profile</button>
+      <button class="nav-link" id="btn-admin" hidden>🛡 Admin</button>
+      <button class="nav-link" id="btn-signout" hidden>Sign Out</button>
+      <button class="nav-link" id="btn-auth">Sign In</button>
+      <button class="pill yellow btn-new-post" id="btn-new-post">+ New Post</button>
+    </nav>
+  </header>
+
+  <!-- ───── Main Layout ───── -->
+  <main class="layout" id="app-layout" hidden>
+
+    <!-- ===== LEFT: Feed Area ===== -->
+    <div class="main-col" id="main-col">
+
+      <!-- Feed view (shown by default) -->
+      <section id="feed-view">
+        <div class="feed-header">
+          <h1 class="page-title">Recent Questions</h1>
+          <div class="sort-pills">
+            <button class="sort-pill active" data-sort="new">Newest</button>
+            <button class="sort-pill" data-sort="hot">Trending</button>
+          </div>
+        </div>
+        <div id="posts-grid" class="posts-list" aria-live="polite"></div>
+      </section>
+
+      <!-- Detail view (hidden by default, replaces feed) -->
+      <section id="detail-view" class="detail-view" hidden>
+        <button class="back-btn" id="btn-back">← Back to posts</button>
+        <article class="detail-card">
+          <div class="detail-vote">
+            <button class="vote-btn" id="btn-upvote" aria-label="Upvote">▲</button>
+            <span class="vote-count" id="vote-count">0</span>
+            <button class="vote-btn" id="btn-downvote" aria-label="Downvote">▼</button>
+          </div>
+          <div class="detail-content">
+            <div class="detail-author" id="detail-author"></div>
+            <h2 class="detail-title" id="detail-title"></h2>
+            <div class="detail-tags" id="detail-tags"></div>
+            <div class="detail-body" id="detail-body"></div>
+            <div class="detail-attachments" id="detail-attachments"></div>
+            <div class="detail-actions" id="detail-actions"></div>
+          </div>
+        </article>
+        <section class="comments-section">
+          <h3 class="section-title" id="comments-heading">Comments</h3>
+          <div class="comment-form" id="comment-form" hidden>
+            <textarea id="comment-text" rows="3" placeholder="Write your answer..."></textarea>
+            <button class="pill yellow" id="btn-comment">Post Comment</button>
+          </div>
+          <div id="comments-list" class="comments-list"></div>
+        </section>
+      </section>
+    </div>
+
+    <!-- ===== RIGHT: Sidebar ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">Popular Topics</h3>
+        <div class="sidebar-topics" id="chip-topics"></div>
+      </div>
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">🔥 Hot Right Now</h3>
+        <div id="hot-posts" class="hot-posts"></div>
+      </div>
+      <footer class="sidebar-footer">
+        <p>&copy; 2026 KSCS Community</p>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Guidelines</a>
+          <a href="#">Privacy</a>
+        </div>
+      </footer>
+    </aside>
+  </main>
+
+  <!-- ───── Admin Panel (overlay) ───── -->
+  <section class="admin-overlay" id="admin-panel" hidden>
+    <div class="admin-inner">
+      <div class="admin-header">
+        <h2>Admin – Content Moderation</h2>
+        <button class="pill ghost" id="btn-close-admin">✕ Close</button>
+      </div>
+      <div id="admin-reports"></div>
+    </div>
+  </section>
+
+  <!-- ───── Notifications Drawer ───── -->
+  <div class="drawer" id="drawer" role="dialog" aria-label="Notifications" aria-hidden="true">
+    <div class="drawer-header">
+      <h3>Notifications</h3>
+      <button class="pill ghost" id="btn-close-drawer">✕</button>
+    </div>
+    <div id="notification-list" class="notifications"></div>
+  </div>
+
+  <!-- ───── Auth Full Page ───── -->
+  <section class="auth-page" id="auth-page" role="dialog" aria-label="Authentication">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-mark lg">✺</div>
+        <div>
+          <div class="brand-name lg">KSCS</div>
+          <div class="brand-sub">Knowledge Sharing Community</div>
+        </div>
+      </div>
+      <h2 id="auth-title">Welcome back</h2>
+      <p class="auth-subtitle">Sign in to join the conversation</p>
+      <form class="auth-form" id="auth-form">
+        <label>Email<input type="email" id="auth-email" required /></label>
+        <label id="auth-name-row" hidden>Display name<input type="text" id="auth-name" /></label>
+        <label>Password<input type="password" id="auth-password" required /></label>
+        <button class="pill yellow full-width" id="btn-auth-submit" type="button">Sign in</button>
+      </form>
+      <p class="auth-toggle" id="auth-toggle">No account? <a href="#">Create one</a></p>
+    </div>
+  </section>
+
+  <!-- ───── Create / Edit Post Modal ───── -->
+  <dialog id="modal-post">
+    <form method="dialog" class="modal">
+      <h3 id="modal-post-title">New post</h3>
+      <input type="hidden" id="post-id" />
+      <label>Title<input type="text" id="post-title" required /></label>
+      <label>Details<textarea id="post-body" rows="5" required></textarea></label>
+      <label>Attachments (Images/Files)<input type="file" id="post-files" multiple accept="image/*,.pdf,.doc,.docx" /></label>
+      <div id="command-area">
+        <label>Tags (comma separated)<input type="text" id="post-tags" placeholder="AI, Career, Python" autocomplete="off" /></label>
+        <div id="tag-suggestions" class="tag-suggestions" hidden></div>
+      </div>
+      <div class="modal-actions">
+        <button class="pill yellow" id="btn-save-post" type="button">Publish</button>
+        <button class="pill ghost" type="button" onclick="this.closest('dialog').close()">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ───── Profile Modal ───── -->
+  <dialog id="modal-profile">
+    <form method="dialog" class="modal">
+      <h3>Edit Profile</h3>
+      <label>Display name<input type="text" id="profile-name" required /></label>
+      <div class="modal-actions">
+        <button class="pill yellow" id="btn-save-profile" type="button">Save</button>
+        <button class="pill ghost" type="button" onclick="this.closest('dialog').close()">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ───── Report Modal ───── -->
+  <dialog id="modal-report">
+    <form method="dialog" class="modal">
+      <h3>Report content</h3>
+      <input type="hidden" id="report-target-type" />
+      <input type="hidden" id="report-target-id" />
+      <label>What's wrong?<textarea id="report-reason" rows="3" required></textarea></label>
+      <div class="modal-actions">
+        <button class="pill yellow" id="btn-send-report" type="button">Submit report</button>
+        <button class="pill ghost" type="button" onclick="this.closest('dialog').close()">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ───── Confirmation Modal ───── -->
+  <dialog id="modal-confirm">
+    <div class="modal">
+      <h3 id="confirm-title">Confirm</h3>
+      <p id="confirm-message" class="modal-text">Are you sure?</p>
+      <div class="modal-actions">
+        <button class="pill ghost" id="btn-confirm-cancel">Cancel</button>
+        <button class="pill yellow" id="btn-confirm-ok">Confirm</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+  <noscript>
+    <div style="position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:#f7f5ef;padding:24px;">
+      <div style="text-align:center;max-width:400px;"><h1>JavaScript Required</h1><p>Please enable JavaScript to use KSCS.</p></div>
+    </div>
+  </noscript>
+</body>
+</html>
