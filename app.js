@@ -166,7 +166,10 @@ els.btnAuthSubmit?.addEventListener("click", async (e) => {
       if (error) throw error;
     }
   } catch (err) {
-    showAlert(err.message, "Auth Error");
+    const msg = err.message === "Failed to fetch"
+      ? "Unable to connect to the server. Your Supabase project may be paused or your internet connection is unstable. Please check your connection and try again."
+      : err.message;
+    showAlert(msg, "Auth Error");
   }
 });
 
