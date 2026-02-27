@@ -229,15 +229,44 @@ function updateAuthUI() {
 
 // ─── Posts ───────────────────────────────────────────────────────────────────
 async function loadPosts() {
-  const { data, error } = await supabase
+  let data, error;
+
+  // Try full query with joins first
+  ({ data, error } = await supabase
     .from("posts")
     .select("*, profiles!posts_author_id_fkey(name, theme_color), likes(user_id)")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false }));
+
+  // If full query fails (missing columns/tables), try simpler queries
+  if (error) {
+    console.warn("loadPosts full query failed, trying without theme_color:", error.message);
+    ({ data, error } = await supabase
+      .from("posts")
+      .select("*, profiles!posts_author_id_fkey(name), likes(user_id)")
+      .order("created_at", { ascending: false }));
+  }
 
   if (error) {
-    console.error("loadPosts:", error);
+    console.warn("loadPosts still failing, trying without likes join:", error.message);
+    ({ data, error } = await supabase
+      .from("posts")
+      .select("*, profiles!posts_author_id_fkey(name)")
+      .order("created_at", { ascending: false }));
+  }
+
+  if (error) {
+    console.warn("loadPosts still failing, trying basic query:", error.message);
+    ({ data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false }));
+  }
+
+  if (error) {
+    console.error("loadPosts: all queries failed:", error);
     return;
   }
+
   state.posts = (data || []).map((p) => ({
     ...p,
     authorName: p.profiles?.name || "Anon",
@@ -568,13 +597,34 @@ async function deletePost(id) {
 
 // ─── Comments ───────────────────────────────────────────────────────────────
 async function loadComments(postId) {
-  const { data, error } = await supabase
+  let data, error;
+
+  ({ data, error } = await supabase
     .from("comments")
     .select("*, profiles!comments_author_id_fkey(name, theme_color)")
     .eq("post_id", postId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true }));
+
   if (error) {
-    console.error("loadComments:", error);
+    console.warn("loadComments: retrying without theme_color:", error.message);
+    ({ data, error } = await supabase
+      .from("comments")
+      .select("*, profiles!comments_author_id_fkey(name)")
+      .eq("post_id", postId)
+      .order("created_at", { ascending: true }));
+  }
+
+  if (error) {
+    console.warn("loadComments: retrying basic query:", error.message);
+    ({ data, error } = await supabase
+      .from("comments")
+      .select("*")
+      .eq("post_id", postId)
+      .order("created_at", { ascending: true }));
+  }
+
+  if (error) {
+    console.error("loadComments: all queries failed:", error);
     return;
   }
   state.comments = (data || []).map((c) => ({
